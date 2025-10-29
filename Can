@@ -1,0 +1,181 @@
+<!doctype html>
+
+<html lang="tr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Affet Beni — Şablon</title>
+  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@500;700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg:#fff0f3;
+      --card:#ffffff;
+      --accent:#e76f8a;
+      --muted:#666;
+    }
+    *{box-sizing:border-box}
+    body{font-family:Inter,system-ui,Arial;background:linear-gradient(180deg,var(--bg),#fff);min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px}
+    .wrap{display:grid;grid-template-columns:1fr 420px;gap:24px;align-items:start;max-width:1100px;width:100%}/* Preview card */
+.card{background:var(--card);border-radius:20px;padding:36px;width:100%;max-width:700px;position:relative;box-shadow:0 10px 30px rgba(0,0,0,0.08);overflow:hidden}
+.card .top{display:flex;gap:16px;align-items:center}
+.avatar{width:68px;height:68px;border-radius:50%;background:linear-gradient(135deg,var(--accent),#ffb3c6);display:flex;align-items:center;justify-content:center;color:white;font-weight:700;font-size:22px}
+h1{font-family:'Dancing Script',cursive;font-size:38px;margin:0;color:var(--accent)}
+p.msg{margin-top:12px;font-size:18px;line-height:1.45;color:var(--muted)}
+
+/* Heart animation */
+.hearts{position:absolute;right:18px;bottom:18px;pointer-events:none}
+.heart{width:18px;height:18px;background:var(--accent);transform:rotate(-45deg);border-radius:4px;position:absolute;opacity:0.9}
+.heart:before,.heart:after{content:'';position:absolute;width:18px;height:18px;background:var(--accent);border-radius:50%}
+.heart:before{top:-9px}
+.heart:after{left:9px}
+
+/* Controls */
+.controls{background:linear-gradient(180deg,#fff,#fff);padding:18px;border-radius:12px;box-shadow:0 6px 20px rgba(0,0,0,0.04)}
+label{display:block;font-size:13px;margin-bottom:6px;color:#333}
+input[type=text],textarea,select{width:100%;padding:10px;border-radius:8px;border:1px solid #eee;font-size:15px}
+textarea{min-height:120px;resize:vertical}
+.btn-row{display:flex;gap:8px;margin-top:12px}
+button{padding:10px 12px;border-radius:10px;border:0;background:var(--accent);color:white;font-weight:600;cursor:pointer}
+button.secondary{background:#f3f3f3;color:#333}
+.tiny{padding:8px 10px;font-size:14px}
+
+@media (max-width:900px){.wrap{grid-template-columns:1fr;max-width:720px}}
+
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div>
+      <div class="card" id="preview">
+        <div class="top">
+          <div class="avatar" id="avatar">KB</div>
+          <div>
+            <h1 id="title">Affet Beni</h1>
+            <div style="font-size:13px;color:var(--muted);margin-top:6px">Sevgiyle yazılmış kısa bir not</div>
+          </div>
+        </div>
+        <p class="msg" id="message">Sana yanlış yaptım. Biliyorum, kelimeler yetmez ama kalbim gerçekten pişman. Lütfen beni affet.</p><div style="margin-top:18px;display:flex;gap:10px;align-items:center">
+      <div style="font-size:13px;color:#999">Gönderen:</div>
+      <div style="font-weight:600">Okan abi</div>
+    </div>
+
+    <div class="hearts" id="hearts"></div>
+  </div>
+</div>
+
+<div class="controls">
+  <label>Başlık</label>
+  <input type="text" id="inputTitle" value="Affet Beni">
+
+  <label style="margin-top:10px">Mesaj</label>
+  <textarea id="inputMessage">Sana yanlış yaptım. Biliyorum, kelimeler yetmez ama kalbim gerçekten pişman. Lütfen beni affet.</textarea>
+
+  <label style="margin-top:10px">Gönderen adı</label>
+  <input type="text" id="inputSender" value="Okan abi">
+
+  <label style="margin-top:10px">Arka plan rengi</label>
+  <select id="bgSelect">
+    <option value="#fff0f3">Pembe Ton</option>
+    <option value="#f0fbff">Mavi Ton</option>
+    <option value="#fffaf0">Sıcak Ton</option>
+  </select>
+
+  <div class="btn-row">
+    <button id="applyBtn" class="tiny">Uygula</button>
+    <button id="shareBtn" class="tiny secondary">Paylaş</button>
+    <button id="downloadBtn" class="tiny">PNG İndir</button>
+  </div>
+
+  <div style="font-size:13px;color:#777;margin-top:12px">Şablon, birmesajmutluluk.com'daki "Affet Beni" tarzına benzer şekilde oluşturulmuştur. İstersen düzenleyip kişiselleştirebilirsin.</div>
+</div>
+
+  </div>  <script>
+    // Basit etkileşimler
+    const inputTitle = document.getElementById('inputTitle');
+    const inputMessage = document.getElementById('inputMessage');
+    const inputSender = document.getElementById('inputSender');
+    const applyBtn = document.getElementById('applyBtn');
+    const preview = document.getElementById('preview');
+    const titleEl = document.getElementById('title');
+    const messageEl = document.getElementById('message');
+    const avatarEl = document.getElementById('avatar');
+    const heartsWrap = document.getElementById('hearts');
+    const bgSelect = document.getElementById('bgSelect');
+    const shareBtn = document.getElementById('shareBtn');
+    const downloadBtn = document.getElementById('downloadBtn');
+
+    function updatePreview(){
+      titleEl.textContent = inputTitle.value || 'Affet Beni';
+      messageEl.textContent = inputMessage.value || '';
+      const sender = inputSender.value || '';
+      avatarEl.textContent = sender.split(' ').map(s=>s[0]||'').slice(0,2).join('').toUpperCase();
+      // background
+      document.documentElement.style.setProperty('--bg', bgSelect.value);
+      triggerHearts();
+    }
+
+    applyBtn.addEventListener('click', updatePreview);
+    // live
+    inputMessage.addEventListener('input', ()=>{ messageEl.textContent = inputMessage.value });
+
+    // simple animated hearts
+    function triggerHearts(){
+      heartsWrap.innerHTML = '';
+      for(let i=0;i<6;i++){
+        const h = document.createElement('div');
+        h.className='heart';
+        const left = Math.random()*120 - 20;
+        const bottom = Math.random()*40;
+        h.style.left = left + 'px';
+        h.style.bottom = bottom + 'px';
+        const scale = 0.8 + Math.random()*0.8;
+        h.style.transform += ' scale('+scale+')';
+        heartsWrap.appendChild(h);
+        // animate
+        h.animate([
+          {transform: `translateY(0) scale(${scale}) rotate(-45deg)`, opacity:0.95},
+          {transform: `translateY(-120px) scale(${scale*0.6}) rotate(-45deg)`, opacity:0}
+        ],{duration:2200+Math.random()*1000,delay:i*120,iterations:1,easing:'ease-out'});
+      }
+    }
+
+    // share
+    shareBtn.addEventListener('click', async ()=>{
+      try{
+        const text = `${titleEl.textContent}\n\n${messageEl.textContent}\n\n- ${inputSender.value}`;
+        if(navigator.share){
+          await navigator.share({title:titleEl.textContent,text});
+        } else {
+          // fallback: copy to clipboard
+          await navigator.clipboard.writeText(text);
+          alert('Metin panoya kopyalandı — paylaşmak için yapıştırabilirsiniz.');
+        }
+      }catch(e){alert('Paylaşım desteklenmiyor veya hata oluştu.');}
+    });
+
+    // download as image (uses html2canvas CDN)
+    downloadBtn.addEventListener('click', async ()=>{
+      if(!window.html2canvas){
+        const script = document.createElement('script');
+        script.src = 'https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js';
+        document.body.appendChild(script);
+        script.onload = () => createImage();
+      } else createImage();
+
+      async function createImage(){
+        const clone = preview.cloneNode(true);
+        // remove controls inside clone if any
+        clone.style.width = '800px';
+        clone.style.padding = '44px';
+        const canvas = await html2canvas(clone, {scale:2,backgroundColor:null});
+        const data = canvas.toDataURL('image/png');
+        const a = document.createElement('a');
+        a.href = data; a.download = 'affet-beni.png';
+        document.body.appendChild(a); a.click(); a.remove();
+      }
+    });
+
+    // initialize
+    updatePreview();
+  </script></body>
+</html>
