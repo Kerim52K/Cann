@@ -1,0 +1,26 @@
+<!doctype html>
+
+<html lang="tr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>CANN — Şablon</title>
+  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@500;700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg:#fff0f3;
+      --card:#ffffff;
+      --accent:#e76f8a;
+      --muted:#666;
+    }
+    *{box-sizing:border-box}
+    body{font-family:Inter,system-ui,Arial;background:linear-gradient(180deg,var(--bg),#fff);min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px}
+    .wrap{display:grid;grid-template-columns:1fr 420px;gap:24px;align-items:start;max-width:1100px;width:100%}
+.card{background:var(--card);border-radius:20px;padding:36px;width:100%;max-width:700px;position:relative;box-shadow:0 10px 30px rgba(0,0,0,0.08);overflow:hidden}
+.card .top{display:flex;gap:16px;align-items:center}
+.avatar{width:68px;height:68px;border-radius:50%;background:linear-gradient(135deg,var(--accent),#ffb3c6);display:flex;align-items:center;justify-content:center;color:white;font-weight:700;font-size:22px}
+h1{font-family:'Dancing Script',cursive;font-size:38px;margin:0;color:var(--accent)}
+p.msg{margin-top:12px;font-size:18px;line-height:1.45;color:var(--muted)}
+
+.hearts{position:absolute;right:18px;bottom:18px;pointer-events:none}
+.heart{width:18px;height:18px;background:var(--accent);transform:rotate(-45
